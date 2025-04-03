@@ -1,20 +1,66 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
     <title>Dashboard</title>
-    <link href="/static/tailwind.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100 text-gray-800 p-6">
     <h1 class="text-2xl font-bold mb-4">Dashboard de Datos Aleatorios</h1>
     <ul class="bg-white shadow rounded p-4">
-        {% for label, value in zip(labels, data) %}
+        {% for i in range(labels|length) %}
         <li class="py-2 border-b border-gray-200">
-            <strong>{{ label }}:</strong> {{ value }}
+            <strong>{{ labels[i] }}:</strong> {{ data[i] }}
         </li>
         {% endfor %}
     </ul>
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Datos Aleatorios</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+    <div class="max-w-4xl mx-auto py-10">
+        <h1 class="text-3xl font-bold mb-6 text-center">Dashboard de Datos Aleatorios</h1>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const labels = JSON.parse('{{ labels | tojson | safe }}');
+        const dataValues = JSON.parse('{{ data | tojson | safe }}');
+
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Valores Aleatorios',
+                    data: dataValues,
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
